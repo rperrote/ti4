@@ -1,9 +1,3 @@
-**/node_modules/
-**/*.sw*
-.env
-npm-debug.log
-db/
-Procfile
-.DS_Store
-static/
-yarn.lock
+node_modules
+dist
+debug.log
