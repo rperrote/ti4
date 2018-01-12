@@ -1,6 +1,6 @@
 # TI4 - Fan App(?)
 
-Pose para entender lee: [Ejemplo][Ejemplo]: <https://medium.com/@gethylgeorge/using-socket-io-in-react-redux-app-to-handle-real-time-data-c0e734297795>
+Pose para entender lee: <https://medium.com/@gethylgeorge/using-socket-io-in-react-redux-app-to-handle-real-time-data-c0e734297795>
 Explica como trabaja redux con socket io
 
 # Server - Backend
