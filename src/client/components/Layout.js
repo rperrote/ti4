@@ -35,7 +35,6 @@ export  class Layout extends React.Component{
    {
 	   super(props)
 	   const {dispatch} = this.props
-	//    dispatch(loadInitialData())
 	   socket = io.connect(`http://localhost:${process.env.PORT || 3000}`)
 	   console.dir(socket)
 	   dispatch(loadInitialDataSocket(socket))
@@ -61,7 +60,7 @@ export  class Layout extends React.Component{
 
 		return (
 			<div>
-				<h1 style={robotFontStyle}>React TO-DO (Real-Time)</h1>
+				<h1 style={robotFontStyle}>Ti4 - Helper</h1>
 
                 <Divider/>
 				<TextField
