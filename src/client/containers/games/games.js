@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 class GameListContainer extends Component {
   componentDidMount() {
-    const { dispatch, user } = this.props;
+    const { dispatch, user, games, socket } = this.props;
     if(!user.username) {
       dispatch(receiveAuth());
     }
