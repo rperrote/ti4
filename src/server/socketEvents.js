@@ -1,3 +1,5 @@
+const todoModel = require('./models/todoModel')  //todo model
+
 exports = module.exports = function(io) {
   const connections = [];
   io.on("connection", function(socket) {

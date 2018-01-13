@@ -7,8 +7,6 @@ const socketServer =require('socket.io')
 
 const app = express();
 
-const todoModel = require('./models/todoModel')  //todo model
-
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(bodyParser.json())
 

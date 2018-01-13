@@ -5,6 +5,8 @@ import { createStore, applyMiddleware } from 'redux'
 import {Provider} from 'react-redux'
 import thunk from 'redux-thunk'
 
+import io from 'socket.io-client';
+
 import reducer from './reducers/index'
 import Games from "./containers/games/games";
 

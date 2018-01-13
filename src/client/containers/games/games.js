@@ -1,20 +1,21 @@
 import React, { Component, PropTypes } from 'react';
-import * as actions from '../actions/actions';
-import Chat from '../components/Chat';
+import * as actions from '../../actions/actions';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Games from '../../components/games/games';
 
 class GameListContainer extends Component {
   componentDidMount() {
-    const { dispatch, user, games, socket } = this.props;
+    const { dispatch, user, games } = this.props;
     if(!user.username) {
       dispatch(receiveAuth());
     }
     dispatch(actions.fetchGames());
   }
   render() {
+    const { socket } = this.props;
     return (
-      <Chat {...this.props} socket={socket} />
+      <Games {...this.props} socket={socket} />
     );
   }
 }
@@ -27,7 +28,7 @@ GameListContainer.propTypes = {
 function mapStateToProps(state) {
   return {
       games: state.games,
-      user: state.auth.user
+      user: state.user
   }
 }
 export default connect(mapStateToProps)(GameListContainer)
