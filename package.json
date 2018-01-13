@@ -10,7 +10,7 @@
     "start2": "webpack-dev-server --content-base --inline --hot",
     "server": "babel-node  server.js",
     "server2": "nodemon server.js",
-    "server+client": "babel-node server.js | yarn start2"
+    "server+client": "babel-node server.js | yarn start"
   },
   "dependencies": {
     "axios": "^0.15.3",

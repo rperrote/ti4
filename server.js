@@ -12,17 +12,17 @@ app.use(bodyParser.json())
 
 // MONGOOSE CONNECT
 // ===========================================================================
-mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/local')
+//mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/local')
 
-var db = mongoose.connection
-db.on('error', ()=> {console.log( '---Gethyl FAILED to connect to mongoose')})
-db.once('open', () => {
-	console.log( '+++Gethyl connected to mongoose')
-})
+//var db = mongoose.connection
+//db.on('error', ()=> {console.log( '---Gethyl FAILED to connect to mongoose')})
+//db.once('open', () => {
+//	console.log( '+++Gethyl connected to mongoose')
+//})
 
 var serve = http.createServer(app);
 var io = socketServer(serve);
-serve.listen(process.env.PORT || 3000,()=> {console.log("+++Gethyl Express Server with Socket Running!!!")})
+serve.listen(3000,()=> {console.log("+++Gethyl Express Server with Socket Running!!!")})
 
 
 /***************************************************************************************** */

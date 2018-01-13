@@ -33,8 +33,8 @@ Events incoming:
     - listGames
     - createGame
     - joinGame
- - Game:
     - claimUser
+ - Game:
     - chooseRace
     - chooseTechnology
     - attackOn

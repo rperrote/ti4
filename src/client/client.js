@@ -15,7 +15,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 const app = document.getElementById('app')
 
-// const socket = io.connect(`https://ti4-zionn.c9users.io/:${process.env.PORT || 3000}`)
+const socket = io.connect(`http://ti4-zionn.c9users.io:3000`)
 
 const store = createStore(reducer, applyMiddleware(thunk))
 
