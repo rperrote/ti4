@@ -1,6 +1,6 @@
 import React from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-import { render } from "react-dom";
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import ReactDOM from "react-dom";
 import { createStore, applyMiddleware } from 'redux'
 import {Provider} from 'react-redux'
 import thunk from 'redux-thunk'
@@ -8,23 +8,21 @@ import thunk from 'redux-thunk'
 import io from 'socket.io-client';
 
 import reducer from './reducers/index'
+import User from "./containers/user/user";
 import Games from "./containers/games/games";
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 const app = document.getElementById('app')
 
-const socket = io.connect(`http://localhost:${process.env.PORT || 3000}`)
+// const socket = io.connect(`https://ti4-zionn.c9users.io/:${process.env.PORT || 3000}`)
 
 const store = createStore(reducer, applyMiddleware(thunk))
 
-render(
+ReactDOM.render(
 	<Provider store={store}>
 		<MuiThemeProvider>
-			<Router>
-        <Route path="/" component={Games} socket={socket}>
-        </Route>
-      </Router>
+			<User/>
 		</MuiThemeProvider>
 	</Provider>
 	, app);

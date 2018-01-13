@@ -8,10 +8,11 @@ const reducer = (state=initialState, action) => {
     case 'GAMES':
         return List(action.games)
         
-    case 'ENTER_GAME':
-        return state.update(action.gameId,(value)=> {
-            return {...value,current: true}
-        })
+    case 'CREATE_GAME':
+        return state.concat(action.game)
+        
+    case 'CLEAN_GAMES':
+        return initialState
         
     default:
       return state

@@ -14,25 +14,30 @@ export const completeItem = (data) => ({
 })
 
 /* Used only by actions for sockets */
-export const initialItems = (res) => ({
-	type: "INITIAL_ITEMS",
-	items: res
+export const setGames = (res) => ({
+	type: "GAMES",
+	games: res
 })
+
+export const clearAllItems = () => {
+	return {
+		type: "CLEAN_GAMES"
+	}
+}
 
 /***************************************************************************************** */
 /* Async Action items using - Sockets													   */
 /***************************************************************************************** */
-export const loadInitialDataSocket = (socket) => {
+export const fetchGames = (socket) => {
 	return (dispatch) => {
-		// dispatch(clearAllItems())
-		socket.on('initialList',(res)=>{
-		   console.dir(res)
-		   dispatch(initialItems(res))
+		dispatch(clearAllItems())
+		socket.on('listGames',(res)=>{
+		   dispatch(setGames(res))
 	   })
 	}	
 }
 
-export const addNewItemSocket = (socket,id,item) => {
+export const createGame = (socket,) => {
 	return (dispatch) => {
 		let postData = {
 				id:id+1,

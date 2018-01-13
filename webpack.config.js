@@ -26,7 +26,7 @@ module.exports = {
   plugins: debug ? [] : [
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
+    // new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
     // Adds webpack HMR support. It act's like livereload,
     // reloading page after webpack rebuilt modules.
     // It also updates stylesheets and inline assets without page reloading.

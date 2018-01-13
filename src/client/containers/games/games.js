@@ -7,9 +7,9 @@ import Games from '../../components/games/games';
 class GameListContainer extends Component {
   componentDidMount() {
     const { dispatch, user, games } = this.props;
-    if(!user.username) {
-      dispatch(receiveAuth());
-    }
+    // if(!user.username) {
+    //   dispatch(receiveAuth());
+    // }
     dispatch(actions.fetchGames());
   }
   render() {

@@ -28,4 +28,32 @@ $ npm run server+cliente
 
 ```
 
+Events incoming:
+ - Games:
+    - listGames
+    - createGame
+    - joinGame
+ - Game:
+    - claimUser
+    - chooseRace
+    - chooseTechnology
+    - attackOn
+    - finishBattle
+    - addModifier
+    - gameFinish
+ 
+events outgoing:
+ - Games:
+    - listGames
+    - createGame
+    - userJoin ( devuele id del user ) 
+ - Game:
+    - userRace
+    - chooseTecnology
+    - attackOn - ( solo notificacion )
+    - finishBattle
+    - addModifier
+    - gameFinish
+
+
 # Para v1 esta bien creo.
