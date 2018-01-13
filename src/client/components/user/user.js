@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from "react";
 import * as actions from "../../actions/actions";
+import ReactDOM from "react-dom";
 import {connect} from 'react-redux'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -47,7 +48,7 @@ export class User extends Component {
 					  () => {
               const name = ReactDOM.findDOMNode(this.refs.name.input).value
               name === "" ?  alert("Item shouldn't be blank") 
-                :  dispatch(action.claimUser(socket,items.size,newItem))
+                :  dispatch(actions.claimUser(socket,name))
 					  }
 					}
 				/>

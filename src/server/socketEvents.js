@@ -56,12 +56,12 @@ exports = module.exports = function(io) {
     
 // SINGLE GAME
     
-    socket.on("claimUser", name => {
+    socket.on("claimUser", user => {
       var player = new Player();
       player.id = playerId;
       playerId = playerId++;
       player[playerId] = player;
-      player.name = name;
+      player.name = user.name;
       playerConnections[playerId] = socket.id;
       connectionPlayers[socket.id] = playerId;
     });

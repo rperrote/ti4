@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const autoIncrement = require('mongoose-auto-increment')
@@ -21,8 +22,9 @@ app.use(bodyParser.json())
 //})
 
 var serve = http.createServer(app);
+app.use(cors());
 var io = socketServer(serve);
-serve.listen(3000,()=> {console.log("+++Gethyl Express Server with Socket Running!!!")})
+serve.listen(8082,()=> {console.log("+++Gethyl Express Server with Socket Running!!!")})
 
 
 /***************************************************************************************** */

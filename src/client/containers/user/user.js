@@ -14,6 +14,7 @@ class UserContainer extends Component {
 }
 UserContainer.propTypes = {
   user: PropTypes.object.isRequired,
+  socket: PropTypes.object.isRequired
 }
 
 function mapStateToProps(state) {

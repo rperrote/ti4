@@ -48,12 +48,8 @@ export const createGame = (socket,) => {
 	}	
 }
 
-export const markItemCompleteSocket = (socket,id,completedFlag) => {
-	return (dispatch) => {
-		let postData = {
-				id:id,
-				completed:completedFlag
-		     }
-		socket.emit('markItem',postData)
+export const claimUser = (socket,name) => {
+	return () => {
+		socket.emit('markItem',{name})
 	}	
 }

@@ -6,7 +6,7 @@
   "author": "Gethyl George Kurian",
   "license": "MIT",
   "scripts": {
-    "start": "webpack-dev-server --content-base --inline --hot --host $IP --port $PORT --public $C9_HOSTNAME",
+    "start": "webpack-dev-server --content-base --inline --hot --host $IP --port 8081 --public $C9_HOSTNAME",
     "start2": "webpack-dev-server --content-base --inline --hot",
     "server": "babel-node  server.js",
     "server2": "nodemon server.js",
