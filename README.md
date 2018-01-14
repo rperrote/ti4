@@ -41,12 +41,12 @@ Events incoming:
     - finishBattle
     - addModifier
     - gameFinish
- 
+
 events outgoing:
  - Games:
     - listGames
     - createGame
-    - userJoin ( devuele id del user ) 
+    - userJoined ( devuele id del user )
  - Game:
     - userRace
     - chooseTecnology
