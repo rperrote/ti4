@@ -1,23 +1,22 @@
 import axios from "axios"
 
-export const AddItem = (data) => ({
-	type: "ADD_ITEM",
-	item: data.item,
-	itemId:data.id,
-	completed:data.completed
-})
-
-export const completeItem = (data) => ({
-	type: "COMPLETED_ITEM",
-	itemId: data.id,
-	completed:data.completed
-})
-
 /* Used only by actions for sockets */
 export const setGames = (res) => ({
 	type: "GAMES",
 	games: res
 })
+
+export const createGame = (res) => ({
+	type: "CREATE_GAME",
+	games: res
+})
+
+export const setUser = (res) => {
+	return {
+		type: "SET_USER",
+		user: res
+	}
+}
 
 export const clearAllItems = () => {
 	return {
@@ -34,22 +33,11 @@ export const fetchGames = (socket) => {
 		socket.on('listGames',(res)=>{
 		   dispatch(setGames(res))
 	   })
-	}	
-}
-
-export const createGame = (socket,) => {
-	return (dispatch) => {
-		let postData = {
-				id:id+1,
-				item:item,
-				completed:false
-		     }
-	    socket.emit('addItem',postData)		
-	}	
+	}
 }
 
 export const claimUser = (socket,name) => {
 	return () => {
 		socket.emit('markItem',{name})
-	}	
+	}
 }

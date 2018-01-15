@@ -1,14 +1,11 @@
 import React, { Component, PropTypes } from "react";
 import * as actions from "../../actions/actions";
 import ReactDOM from "react-dom";
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
+
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import Divider from 'material-ui/Divider'
-
-import injectTapEventPlugin from 'react-tap-event-plugin'
-
-injectTapEventPlugin()
 
 let robotFontStyle = {
 	fontFamily: "Roboto, sans-serif",
@@ -28,12 +25,28 @@ export class User extends Component {
   };
   constructor(props, context) {
     super(props, context);
+    const { socket, user, dispatch, history } = this.props;
+    socket.on('claimUser',(res)=>{
+      dispatch(actions.setUser(res));
+      console.log("Responde pose");
+      console.log(res);
+    });
+
+    socket.on('listGames',(res)=>{
+      dispatch(actions.setGames(res));
+      if(history.location.pathname.indexOf("games") == -1){
+        history.push("/games");
+      }
+      console.log("Responde pose");
+      console.log(res);
+    });
   }
   render() {
     const { socket, user, dispatch } = this.props;
     return (
 			<div>
 				<h1 style={robotFontStyle}>Ti4 - Helper</h1>
+        <h3 style={robotFontStyle}>Login</h3>
         <Divider/>
 				<TextField
 					hintText="Ingresa tu nombre"
@@ -43,12 +56,11 @@ export class User extends Component {
                 {" "}
 				<RaisedButton
 					label="Login" primary={true}
-					onTouchTap={ 
-					  
+					onTouchTap={
 					  () => {
               const name = ReactDOM.findDOMNode(this.refs.name.input).value
-              name === "" ?  alert("Item shouldn't be blank") 
-                :  dispatch(actions.claimUser(socket,name))
+              name === "" ?  alert("Item shouldn't be blank")
+                :  socket.emit('claimUser',{name}); console.log("Emito claimUser");
 					  }
 					}
 				/>

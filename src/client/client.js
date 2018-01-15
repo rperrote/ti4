@@ -1,28 +1,32 @@
-import React from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import React from "react";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import ReactDOM from "react-dom";
-import { createStore, applyMiddleware } from 'redux'
-import {Provider} from 'react-redux'
-import thunk from 'redux-thunk'
+import { browserHistory } from "react-router";
+import { createStore, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+import thunk from "redux-thunk";
+import DevTools from "./components/devTools/devTools";
 
-import io from 'socket.io-client';
+import App from "./components/app/app";
 
-import reducer from './reducers/index'
-import User from "./containers/user/user";
-import Games from "./containers/games/games";
+import reducer from "./reducers/index";
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
-const app = document.getElementById('app')
+const app = document.getElementById("app");
 
-const socket = io.connect(`http://ti4-zionn.c9users.io:8082`)
-
-const store = createStore(reducer, applyMiddleware(thunk))
+const store = createStore(reducer, applyMiddleware(thunk), DevTools.instrument());
 
 ReactDOM.render(
-	<Provider store={store}>
-		<MuiThemeProvider>
-			<User/>
-		</MuiThemeProvider>
-	</Provider>
-	, app);
+  <Provider store={store}>
+    <div>
+      <MuiThemeProvider>
+        <Router history={browserHistory}>
+          <App />
+        </Router>
+      </MuiThemeProvider>
+      <DevTools />
+    </div>
+  </Provider>,
+  app
+);

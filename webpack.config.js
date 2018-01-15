@@ -1,6 +1,7 @@
 var debug = process.env.NODE_ENV !== "production";
 var webpack = require('webpack');
 var path = require('path');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   context: __dirname, //path.join(__dirname, "src"),
@@ -20,12 +21,15 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/dist/',
+    publicPath: '/',
     filename: "client.min.js"
   },
-  plugins: debug ? [] : [
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
+  plugins: [
+    new HtmlWebpackPlugin({
+    template: "index.html",
+    filename: "index.html",
+    inject: "body",
+  }),
     // new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
     // Adds webpack HMR support. It act's like livereload,
     // reloading page after webpack rebuilt modules.

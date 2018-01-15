@@ -41,7 +41,7 @@ Events incoming:
     - finishBattle
     - addModifier
     - gameFinish
- 
+
 events outgoing:
  - Games:
     - listGames

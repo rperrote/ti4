@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server --content-base --inline --hot --host $IP --port 8081 --public $C9_HOSTNAME",
-    "start2": "webpack-dev-server --content-base --inline --hot",
+    "start2": "webpack-dev-server --content-base --inline --hot --port 3000",
+    "build": "webpack",
     "server": "babel-node  server.js",
     "server2": "nodemon server.js",
     "server+client": "babel-node server.js | yarn start"
@@ -22,22 +23,42 @@
     "babel-preset-stage-0": "^6.16.0",
     "body-parser": "^1.16.0",
     "express": "^4.14.1",
+    "history": "^4.7.2",
+    "html-webpack-plugin": "^2.30.1",
     "http": "^0.0.0",
     "immutable": "^3.8.1",
     "material-ui": "^0.17.0",
+    "moment": "^2.20.1",
     "mongoose": "^4.8.1",
     "mongoose-auto-increment": "^5.0.1",
     "nodemon": "^1.11.0",
-    "react": "^15.4.1",
-    "react-dom": "^15.4.1",
+    "react": "^15.5.3",
+    "react-dom": "^15.5.3",
+    "react-immutable-proptypes": "^2.1.0",
     "react-redux": "^5.0.1",
     "react-router-dom": "^4.2.2",
+    "react-router-redux": "^5.0.0-alpha.9",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
     "socket.io": "^1.7.2",
-    "webpack": "^1.14.0",
-    "webpack-dev-server": "^1.16.2"
+    "web-webpack-plugin": "^1.10.0",
+    "webpack": "^3.5.5",
+    "webpack-bundle-analyzer": "^2.9.0",
+    "webpack-bundle-size-analyzer": "^2.7.0",
+    "webpack-dev-server": "^2.10.1",
+    "webpack-encoding-plugin": "^0.2.1",
+    "webpack-hot-middleware": "^2.18.2",
+    "webpack-pwa-manifest": "^3.4.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "html-webpack-plugin": "^2.30.1",
+    "redux-devtools": "^3.4.1",
+    "redux-devtools-dispatch": "^2.2.1",
+    "redux-devtools-dock-monitor": "^1.1.3",
+    "redux-devtools-filterable-log-monitor": "^0.8.0",
+    "redux-devtools-inspector": "^0.11.3",
+    "redux-devtools-log-monitor": "^1.4.0",
+    "redux-slider-monitor": "^2.0.0-1"
+  }
 }
