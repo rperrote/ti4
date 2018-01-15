@@ -15,6 +15,13 @@ Modificar los sockets events para lo que necesitamos:
  - Para este momento el usuario ya esta linkeado a la partida (por lo que hasta que no se cierre la partida la tiene como current) y a una raza en esa partida.
  - Adquisicion de tecnologias
 
+Para levantar la web:
+```sh
+$ npm install
+$ npm run start2
+* Abrir browser: localhost:3000 * (eso necesita del server de c9 levantado)
+```
+
 
 Para levantar el server:
 ```sh
