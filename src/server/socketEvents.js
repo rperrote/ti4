@@ -1,11 +1,13 @@
 //const todoModel = require('./models/todoModel')  //todo model
-var Game = require('./models/game');
-var Player = require('./models/player');
+const GameModel = require('./models/gameModel')
+const UserModel = require('./models/userModel')
+const PlayerModel = require('./models/playerModel')
+const BattleModel = require('./models/battleModel')
+
+const mongoose = require('mongoose');
 
 exports = module.exports = function(io) {
   const connections = [];
-  const games = [];
-  const players = [];
   const playerConnections = [];
   const connectionPlayers = [];
   var gameId = 0;
@@ -22,96 +24,275 @@ exports = module.exports = function(io) {
 
 //GAMES
     socket.on("listGames", () => {
-      io.emit('listGames', games);
+      GameModel.find({}).
+      populate('players'). // only return the Persons name
+      exec(function(err, games) {
+        if( err ){
+          console.log("---Gethyllist games failed!! " + err);
+          return;
+        }else{
+          io.to(socket.id).emit('listGames', games);
+        }
+      });
     });
 
     socket.on("createGame", () => {
       //TODO id asignment 
-      var game = new Game();
-      game.id = gameId;
-      gameId = gameId++;
-      games[game.id] = game;
-      io.emit('createGame', game);
+      var userId = connectionPlayers[socket.id];
+      
+      var gameModel = new GameModel({ owner: userId });
+      
+      gameModel.save((err, result) => {
+        if (err) {
+          console.log("---Gethy create game failed!! " + err);
+          return;
+        } else {
+          console.log({ message: "Created new game with id: " + result.id });
+          
+          
+          io.emit('gameCreated', result);
+          
+          /******* join game ********/
+          joinUser(userId, result.id, playerConnections, io, true);
+          /******* join game finish ********/
+        }
+      });
     });
     
     socket.on("joinGame", (gameId) => {
       
+      console.log("join game game ID " + gameId);
+      
       var userId = connectionPlayers[socket.id];
       
-      var game = games[gameId];
-      var player = players[userId];
+      /*******  user mode Start *******/  
+    
+      joinUser(userId, gameId, playerConnections, io);
       
-      var gamePlayer = new Player();
-      gamePlayer.name = player.name;
-      
-      game.players[gamePlayer.name] = gamePlayer;
-      
-      var response = {};
-      response.gameId = gameId;
-      response.userId = gamePlayer;
-      
-      // TODO join game body
-      broadcastToGame(game, userId, 'userJoin', response, playerConnections);
+      /*******  user mode finish *******/  
     });
     
 // SINGLE GAME
     
     socket.on("claimUser", user => {
-      var player = new Player();
-      player.id = playerId;
-      playerId = playerId++;
-      player[playerId] = player;
-      player.name = user.name;
-      playerConnections[playerId] = socket.id;
-      connectionPlayers[socket.id] = playerId;
+      
+      var userDb = null;
+      
+      /****** star user model get user ********/
+      UserModel.find(
+        {name: user.name},
+        // "-_id itemId item completed",
+        (err, result) => {
+          if (err) {
+            console.log("---Gethyl GET USER failed!!");
+            return;
+          } else {
+            userDb = result[0];
+            console.log(" user get by name");
+            
+            var player = {};
+            if( userDb != null ){
+              player = userDb;
+              
+              playerConnections[player.id] = socket.id;
+              connectionPlayers[socket.id] = player.id;
+              
+              console.log("claime user: send user");
+              io.to(socket.id).emit('claimUser', player);
+              
+              /****** star game model get games********/
+              GameModel.find({}).
+              populate('players'). // only return the Persons name
+              exec(function(err, games) {
+                if( err ){
+                  console.log("---Gethyl GET GAMES failed!! " + err);
+                  return;
+                }else{
+                  console.log("dens list games");
+                  io.to(socket.id).emit('listGames', games);
+                }
+              });
+              /****** star game model get games finish********/
+              
+              return;
+            }else{
+              player = {};
+              player.id = playerId;
+              playerId = playerId++;
+              player.name = user.name;
+              
+              var userModel = new UserModel({ id: player.id, name: user.name });
+              
+              console.log("user claim " + user.name);
+              playerConnections[player.id] = socket.id;
+              connectionPlayers[socket.id] = player.id;
+            
+              /****** star user model save user********/
+              userModel.save((err, result) => {
+                if (err) {
+                  console.log("---Gethyl SAVE USER failed!! " + err);
+                  return;
+                } else {
+                  console.log({ message: "Created new game with id: " + player.id });
+                  
+                  console.log("claime user: send user");
+                  io.to(socket.id).emit('claimUser', player);
+                  
+                  /****** star game model get games********/
+                  GameModel.find({}, function(err, games) {
+                    if( err ){
+                      return;
+                    }else{
+                      console.log("dens list games");
+                      io.to(socket.id).emit('listGames', games);
+                    }
+                  });
+                  /****** star game model get games finish********/
+                }
+              });
+               /****** star user model save user finish ********/
+            }
+          }
+        }
+      );
+      
+      /****** star user model get user finish********/
+      
     });
     
     socket.on("chooseRace", (gameId, raceId) => {
       var userId = connectionPlayers[socket.id];
-      var game = games[gameId];
-      var player = game.players[userId];
-      player.race = raceId;
       
-      var response = {};
-      response.gameId = gameId;
-      response.userId = userId;
-      response.race = raceId;
+      GameModel.update(
+        { id: gameId, "players.owner": userId },
+        { $set:{ "players.race": raceId } },
+        function (err, raw) {
+          if (err){
+            console.log("---Gethyl update player race failed!!" + err);
+            return;
+          }else{
+            var response = {};
+            response.gameId = gameId;
+            response.userId = userId;
+            response.race = raceId;
+            
+            /********* game model get game ********/
+            GameModel.find(
+              { id: gameId },
+              // "-_id itemId item completed",
+              (err, game) => {
+                if (err) {
+                  console.log("---Gethyl chooseRace GET GAME failed!!" + err);
+                  return;
+                } else {
+                  var gameDb = result[0];
+                  broadcastToGame(game, userId, 'chooseTecnology', response, playerConnections, io);
+                }
+            });
+            /********* game model get game FINISH ********/
+          }
+        }
+      );
       
-      broadcastToGame(game, userId, 'userRace', response, playerConnections);
     });
     
     socket.on("chooseTechnology", (gameId, technoId) => {
+      
       var userId = connectionPlayers[socket.id];
-      var game = games[gameId];
-      var player = game.players[userId];
       
-      if( !player.technologies.includes(technoId)){
-        player.technologies.push(technoId);
-      }
+      GameModel.update(
+        { id: gameId, 'players.owner': userId },
+        { $push: { 'players.tecnologies': technoId } },
+        function (err, raw) {
+          if (err){
+            console.log("---Gethyl update player race failed!!" + err);
+            return;
+          }else{
+            
+            /********* game model get game ********/
+            GameModel.find(
+              { id: gameId },
+              // "-_id itemId item completed",
+              (err, result) => {
+                if (err) {
+                  console.log("---Gethyl chooseRace GET GAME failed!!" + err);
+                  return;
+                } else {
+                  var gameDb = result[0];
+                  var response = {};
+                  response.gameId = gameId;
+                  response.userId = userId;
+                  response.technoId = technoId;
+                  broadcastToGame(gameDb, userId, 'chooseTecnology', response, playerConnections, io);
+                }
+            });
+            /********* game model get game FINISH ********/
+          }
+        }
+      );
       
-      var response = {};
-      response.gameId = gameId;
-      response.userId = userId;
-      response.technoId = technoId;
-      
-      broadcastToGame(game, userId, 'chooseTecnology', response, playerConnections);
     });
     
     socket.on("attackOn", (gameId, defenderId) => {
+      
       var attackerId = connectionPlayers[socket.id];
       var socketId = playerConnections[defenderId];
       
-      var game = games[gameId];
-      var attacker = game.players[attackerId];
-      var defender = game.players[defenderId];
+      var attacker = null;
+      var defender = null; 
       
-      var battle = {};
-      battle.attackerId = attackerId;
-      battle.defenderId = defenderId;
-      attacker.battles.push(battle);
-      defender.battles.push(battle);
+      /***** get attacker start ******/
+      GameModel.find(
+        { id: gameId, 'players.owner': attackerId},
+        (err, result) => {
+          if (err) {
+            console.log("---Gethyl GET attacker  failed!!" + err);
+            return;
+          } else {
+            console.log(" get game by gameId, and owner ");
+            attacker = result[0];
+            
+            /***** get defender start ******/
+             GameModel.find(
+              { id: gameId, 'players.owner': defenderId},
+              (err, result) => {
+                if (err) {
+                  console.log("---Gethyl GET attacker  failed!!" + err);
+                  return;
+                } else {
+                  console.log("+++Gethyl GET worked!!");
+                  defender = result[0];
+                  
+                  var battleModel = new BattleModel({ attackerId: attackerId, defenderId: defenderId });
+                  
+                  battleModel.save((err, result) => {
+                    if (err) {
+                      console.log("---Gethyl create battle failed!! " + err);
+                      return;
+                    } else {
+                      console.log({ message: "Created new game with id: " + game.id });
+                      
+                        var battle = {};
+                        battle.attackerId = attackerId;
+                        battle.defenderId = defenderId;
+                        attacker.battles.push(battle);
+                        defender.battles.push(battle);
+                        
+                        io.to(socketId).emit('attackOn', battle);
+                    }
+                  });
+                }
+              });
+              
+              /***** get defender finish ******/
+            
+            
+          }
+        });
+        
+        /***** get attacker finish ******/
       
-      io.sockets.socket(socketId).emit('attackOn', battle);
+  
       
     });
     
@@ -127,7 +308,7 @@ exports = module.exports = function(io) {
       battle.finished = true;
       otherBattle.finished = true;
       
-      io.sockets.socket( playerConnections[otherId]).emit('finishBattle', battleId);
+      io.to(playerConnections[otherId]).emit('finishBattle', battleId);
     });
     
     socket.on("addModifier", markedItem => {
@@ -141,16 +322,124 @@ exports = module.exports = function(io) {
   });
 };
 
-function broadcastToGame(game, myId,  event, body, playerConnections){
+function broadcastToGame(game, myId,  event, body, playerConnections, io){
   game.players.forEach(player => {
-    if( player.id == myId ){
-      return;
-    }
-    var socketId = playerConnections[player.id];
+    var socketId = playerConnections[player.owner];
+    console.log("send broadcast " + player.owner);
     //TODO check body
-     io.sockets.socket(socketId).emit(event, body);
+     io.to(socketId).emit(event, body);
   })
 }
 
+function joinUser(userId, gameId, playerConnections, io, skipSendList){
+  var playerDb = null;
+  var gameDb = null;
+  
+  console.log("finding user by id " + userId);
+  
+  UserModel.findOne(
+    { id: userId },
+    (err, userDb) => {
+      if (err) {
+        console.log("---Gethyl GET failed!!" + err);
+        return;
+      } else {
+        console.log( "  user get by user Id ");
+        
+        console.log(userDb);
+    
+        /*******  gameModel playsers Start *******/
+        PlayerModel.findOne(
+         { gameId: gameId, owner: userId },
+          (err, result) => {
+            if (err) {
+              console.log("---Gethyl GET failed!!" + err);
+              return;
+            } else {
+              playerDb = result;
+              console.log(" get player by game id y owner ");
+              
+              if( playerDb != null ){
+                GameModel.findOne({id: gameId}).
+                populate('players'). // only return the Persons name
+                exec(function(err, game) {
+                  if( err ){
+                    console.log("---Gethyl GET GAMES failed!! " + err);
+                    return;
+                  }else{
+                    var gamePlayer = {};
+                    gamePlayer.name = userDb.name;
+                    gamePlayer.owner = userDb.id;
+                    var response = {};
+                    response.gameId = gameId;
+                    response.newPlayer = gamePlayer;
+                    console.log( "dens player ");
+                    console.log( game.players);
+                    broadcastToGame(game, userId, 'userJoined', response, playerConnections, io);
+                  }
+                });
+                return;
+              }
+                    
+              var gamePlayer = {};
+              gamePlayer.name = userDb.name;
+              gamePlayer.owner = userDb.id;
 
+              /******* create new player ********/
+              
+              var playerModel = new PlayerModel({
+                  owner: userDb.id,
+                  name: userDb.name,
+                  gameId: gameId
+              });
+              
+              playerModel.save((err, result) => {
+                if (err) {
+                  console.log("---Gethyl create player failed!! " + err);
+                  return;
+                } else {
+                  
+                  var response = {};
+                  response.gameId = gameId;
+                  response.newPlayer = gamePlayer;
+                  
+                  GameModel.update(
+                  { id: gameId },
+                  { $addToSet:{ "players": playerModel._id } },
+                  function (err, raw) {
+                    if (err){
+                      console.log("---Gethyl update player race failed!!" + err);
+                      return;
+                    }else{
+                      
+                      if( skipSendList ){
+                        return;
+                      }
+                      
+                      GameModel.findOne({id: gameId}).
+                      populate('players'). // only return the Persons name
+                      exec(function(err, game) {
+                        if( err ){
+                          console.log("---Gethyl GET GAMES failed!! " + err);
+                          return;
+                        }else{
+                          console.log("send list games");
+                          broadcastToGame(game, userId, 'userJoined', response, playerConnections, io);
+                        }
+                      });
+                      
+                    }
+                  });
 
+            }
+          }
+        );
+        
+        /*******  gameModel playsers finish *******/
+    
+        }
+      }
+    );
+      }
+    });
+}

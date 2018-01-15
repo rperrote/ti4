@@ -13,13 +13,15 @@ app.use(bodyParser.json())
 
 // MONGOOSE CONNECT
 // ===========================================================================
-//mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/local')
+mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/local')
 
-//var db = mongoose.connection
-//db.on('error', ()=> {console.log( '---Gethyl FAILED to connect to mongoose')})
-//db.once('open', () => {
-//	console.log( '+++Gethyl connected to mongoose')
-//})
+var db = mongoose.connection;
+db.on('error', ()=> {console.log( '---Gethyl FAILED to connect to mongoose')})
+db.once('open', () => {
+	console.log( '+++Gethyl connected to mongoose')
+})
+
+autoIncrement.initialize(db);
 
 var serve = http.createServer(app);
 app.use(cors());

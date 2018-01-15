@@ -45,8 +45,8 @@ Events incoming:
 events outgoing:
  - Games:
     - listGames
-    - createGame
-    - userJoin ( devuele id del user ) 
+    - gameCreated
+    - userJoined ( devuele id del user ) 
  - Game:
     - userRace
     - chooseTecnology
