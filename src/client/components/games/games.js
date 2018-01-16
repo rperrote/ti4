@@ -75,8 +75,14 @@ export class Games extends Component {
               <ListItem
                 key={key}
                 onClick={event => {
-                  socket.emit('joinGame',game.id);
-                  console.log(`Emito joinGame ${user}`);
+                  let alreadyIn = (game.players.find((player) => {
+                    return user.id == player.owner;
+                  }));
+                  if(!alreadyIn){
+                    socket.emit('joinGame',game.id);
+                    console.log(`Emito joinGame ${user}`);
+                  }
+                  dispatch(actions.setCurrentGame(game));
                 }}
                 primaryText={`Partida de ${user.name}`}
                 rightIcon={<ArrowRight />}
