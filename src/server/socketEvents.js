@@ -86,11 +86,10 @@ exports = module.exports = function(io) {
         // "-_id itemId item completed",
         (err, result) => {
           if (err) {
-            console.log("---Gethyl GET USER failed!!");
+            console.log("--claim user - GET USER failed!!");
             return;
           } else {
             userDb = result[0];
-            console.log(" user get by name");
             
             var player = {};
             if( userDb != null ){
@@ -99,7 +98,6 @@ exports = module.exports = function(io) {
               playerConnections[player.id] = socket.id;
               connectionPlayers[socket.id] = player.id;
               
-              console.log("claime user: send user");
               io.to(socket.id).emit('claimUser', player);
               
               /****** star game model get games********/
@@ -107,10 +105,9 @@ exports = module.exports = function(io) {
               populate('players'). // only return the Persons name
               exec(function(err, games) {
                 if( err ){
-                  console.log("---Gethyl GET GAMES failed!! " + err);
+                  console.log("---claim user - get games " + err);
                   return;
                 }else{
-                  console.log("dens list games");
                   io.to(socket.id).emit('listGames', games);
                 }
               });
@@ -132,12 +129,9 @@ exports = module.exports = function(io) {
               /****** star user model save user********/
               userModel.save((err, result) => {
                 if (err) {
-                  console.log("---Gethyl SAVE USER failed!! " + err);
+                  console.log("---claim user -  SAVE USER failed!! " + err);
                   return;
                 } else {
-                  console.log({ message: "Created new game with id: " + player.id });
-                  
-                  console.log("claime user: send user");
                   io.to(socket.id).emit('claimUser', player);
                   
                   /****** star game model get games********/
@@ -145,7 +139,6 @@ exports = module.exports = function(io) {
                     if( err ){
                       return;
                     }else{
-                      console.log("dens list games");
                       io.to(socket.id).emit('listGames', games);
                     }
                   });
