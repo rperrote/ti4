@@ -8,6 +8,7 @@
   "scripts": {
     "start": "webpack-dev-server --content-base --inline --hot --host $IP --port 8081 --public $C9_HOSTNAME",
     "start2": "webpack-dev-server --content-base --inline --hot --port 3000",
+    "start3": "webpack-dev-server --content-base --inline --hot --port 3005",
     "build": "webpack",
     "server": "babel-node  server.js",
     "server2": "nodemon server.js",

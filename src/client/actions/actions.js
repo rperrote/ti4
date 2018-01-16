@@ -32,9 +32,9 @@ export const joinGame = (idGame, user) => {
 	}
 }
 
-export const changeCurrentGame = (game) => {
+export const setCurrentGame = (game) => {
 	return {
-		type: "CHANGE_CURRENT_GAME",
+		type: "SET_CURRENT_GAME",
 		game
 	}
 }
