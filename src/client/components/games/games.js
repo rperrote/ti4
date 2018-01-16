@@ -76,7 +76,7 @@ export class Games extends Component {
                 key={key}
                 onClick={event => {
                   socket.emit('joinGame',game.id);
-                  console.log("Emito joinGame");
+                  console.log(`Emito joinGame ${user}`);
                 }}
                 primaryText={`Partida de ${user.name}`}
                 rightIcon={<ArrowRight />}

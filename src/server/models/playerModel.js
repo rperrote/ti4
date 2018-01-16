@@ -12,6 +12,7 @@ var userSchema = new Schema({
     name: String,
     race: Number,
     tecnologies: [Number],
+    battles: [{type: Schema.ObjectId, ref: 'BattleModel'}]
 });
 
 // autoincrement plugin is used to increment the itemId

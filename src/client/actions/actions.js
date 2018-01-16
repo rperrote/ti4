@@ -1,26 +1,41 @@
 import axios from "axios"
 
 /* Used only by actions for sockets */
-export const setGames = (res) => ({
+export const setGames = (games) => ({
 	type: "GAMES",
-	games: res
+	games
 })
 
-export const createGame = (res) => ({
+export const createGame = (game) => ({
 	type: "CREATE_GAME",
-	games: res
+	game
 })
 
-export const setUser = (res) => {
+export const setUser = (user) => {
 	return {
 		type: "SET_USER",
-		user: res
+		user
 	}
 }
 
 export const clearAllItems = () => {
 	return {
 		type: "CLEAN_GAMES"
+	}
+}
+
+export const joinGame = (idGame, user) => {
+	return {
+		type: "JOIN_GAME",
+		idGame,
+		user
+	}
+}
+
+export const changeCurrentGame = (game) => {
+	return {
+		type: "CHANGE_CURRENT_GAME",
+		game
 	}
 }
 
