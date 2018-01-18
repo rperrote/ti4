@@ -11,7 +11,9 @@ import App from "./components/app/app";
 
 import reducer from "./reducers/index";
 
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import { MuiThemeProvider, createMuiTheme,  } from 'material-ui/styles';
+
+const theme = createMuiTheme();
 
 const app = document.getElementById("app");
 
@@ -20,7 +22,7 @@ const store = createStore(reducer, applyMiddleware(thunk), DevTools.instrument()
 ReactDOM.render(
   <Provider store={store}>
     <div>
-      <MuiThemeProvider>
+      <MuiThemeProvider theme={theme}>
         <Router history={browserHistory}>
           <App />
         </Router>

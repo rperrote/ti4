@@ -1,13 +1,14 @@
-import React, { Component, PropTypes } from "react";
+import React, { Component } from "react";
+import PropTypes from 'prop-types';
 import * as actions from "../../actions/actions";
 import { connect } from "react-redux";
 
 import { List, ListItem } from "material-ui/List";
 import Divider from 'material-ui/Divider'
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from 'material-ui/Button';
 
-import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
-import AddIcon from 'material-ui/svg-icons/content/add';
+import ArrowRight from 'material-ui-icons/KeyboardArrowRight';
+import AddIcon from 'material-ui-icons/Add';
 
 import Immutable from "immutable";
 import Moment from "moment";
@@ -45,10 +46,15 @@ export class Games extends Component {
       console.log(res);
     });
   }
+
+  setLocalPlayerAndCurrentGame(player, game) {
+    console.log(player, game);
+  }
+
   componentWillMount() {
     const { socket, user, games, dispatch, history } = this.props;
     if (!user || !user.name || user.name == "") {
-      history.push("/");
+      // history.push("/");
     }
   }
   componentDidUpdate() {}
@@ -58,16 +64,16 @@ export class Games extends Component {
       <div>
         <h1 style={robotFontStyle}>Ti4 - Helper</h1>
         <h3 style={robotFontStyle}>Games ({games.size})</h3>
-        <RaisedButton
+        <Button
           secondary={true}
-          icon={<AddIcon />}
+
           onTouchTap={
             () => {
               socket.emit('createGame');
               console.log("Emito createGame");
             }
           }
-        />
+        ><AddIcon /> </Button>
         <Divider/>
         <List>
           {games.map((game, key) => {
@@ -80,9 +86,9 @@ export class Games extends Component {
                   }));
                   if(!alreadyIn){
                     socket.emit('joinGame',game.id);
-                    console.log(`Emito joinGame ${user}`);
+                  }else{
+                    this.setLocalPlayerAndCurrentGame(alreadyIn, player);
                   }
-                  dispatch(actions.setCurrentGame(game));
                 }}
                 primaryText={`Partida de ${user.name}`}
                 rightIcon={<ArrowRight />}

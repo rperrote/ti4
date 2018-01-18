@@ -1,72 +1,67 @@
-import React, { Component, PropTypes } from "react";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import * as actions from "../../actions/actions";
 import ReactDOM from "react-dom";
-import { connect } from 'react-redux'
+import { connect } from "react-redux";
 
-import TextField from 'material-ui/TextField'
-import RaisedButton from 'material-ui/RaisedButton'
-import Divider from 'material-ui/Divider'
+import TextField from "material-ui/TextField";
+import Button from "material-ui/Button";
+import Divider from "material-ui/Divider";
 
 let robotFontStyle = {
-	fontFamily: "Roboto, sans-serif",
-	color: "rgba(0, 0, 0, 0.870588)"
-}
-
-let socket
-const mapStateToProps = (state = {}) => {
-	// console.dir(state)
-    return {...state};
+  fontFamily: "Roboto, sans-serif",
+  color: "rgba(0, 0, 0, 0.870588)"
 };
 
-export class User extends Component {
-  static propTypes = {
-    user: PropTypes.object.isRequired,
-    socket: PropTypes.object.isRequired
-  };
+export default class User extends Component {
   constructor(props, context) {
     super(props, context);
-    const { socket, user, dispatch, history } = this.props;
-    socket.on('claimUser',(res)=>{
-      dispatch(actions.setUser(res));
-      console.log("Responde pose");
-      console.log(res);
-    });
 
-    socket.on('listGames',(res)=>{
-      dispatch(actions.setGames(res));
-      if(history.location.pathname.indexOf("games") == -1){
-        history.push("/games");
-      }
-      console.log("Responde pose");
-      console.log(res);
-    });
+    this.state = {name: ''};
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  handleChange(event) {
+    this.setState({ name: event.target.value });
+  }
+
+  handleSubmit(event) {
+    const { claimUser } = this.props;
+    event.preventDefault();
+
+    if(this.state.name === ""){
+      alert("Item shouldn't be blank")
+    }else{
+      claimUser(this.state.name);
+    }
+  }
+
   render() {
-    const { socket, user, dispatch } = this.props;
     return (
-			<div>
-				<h1 style={robotFontStyle}>Ti4 - Helper</h1>
+      <div>
+        <h1 style={robotFontStyle}>Ti4 - Helper</h1>
         <h3 style={robotFontStyle}>Login</h3>
-        <Divider/>
-				<TextField
-					hintText="Ingresa tu nombre"
-      				floatingLabelText="Nombre"
-					ref="name"
-				/>
-                {" "}
-				<RaisedButton
-					label="Login" primary={true}
-					onTouchTap={
-					  () => {
-              const name = ReactDOM.findDOMNode(this.refs.name.input).value
-              name === "" ?  alert("Item shouldn't be blank")
-                :  socket.emit('claimUser',{name}); console.log("Emito claimUser");
-					  }
-					}
-				/>
-			</div>
-		);
+        <Divider />
+        <form onSubmit={this.handleSubmit}>
+          <TextField
+            id="name"
+            label="Nombre"
+            placeholder="Ingresa tu nombre"
+            value={this.state.name}
+            onChange={this.handleChange}
+            margin="normal"
+          />
+          {" "}
+          <Button
+            raised
+            color="primary"
+            type="submit"
+          >
+            Ingresar
+          </Button>
+        </form>
+      </div>
+    );
   }
 }
-
-export default connect(mapStateToProps)(User)
