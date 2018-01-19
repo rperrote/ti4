@@ -18,34 +18,7 @@ let robotFontStyle = {
   color: "rgba(0, 0, 0, 0.870588)"
 }
 
-let socket
-const mapStateToProps = (state = {}) => {
-  // console.dir(state)
-  return { ...state };
-};
-
 export class Games extends Component {
-  static propTypes = {
-    games: PropTypes.oneOfType([
-      PropTypes.instanceOf(Array),
-      PropTypes.instanceOf(Immutable.List)
-    ]).isRequired,
-    user: PropTypes.object.isRequired,
-    socket: PropTypes.object.isRequired
-  };
-  constructor(props, context) {
-    super(props, context);
-    const { socket, user, dispatch, history } = this.props;
-
-    socket.on('gameCreated',(res)=>{
-      console.log("Responde pose");
-      dispatch(actions.createGame(res));
-    });
-
-    socket.on('userJoined',(res)=>{
-      console.log(res);
-    });
-  }
 
   setLocalPlayerAndCurrentGame(player, game) {
     console.log(player, game);
@@ -101,4 +74,3 @@ export class Games extends Component {
   }
 }
 
-export default connect(mapStateToProps)(Games);

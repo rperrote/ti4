@@ -27,13 +27,15 @@ export default class User extends Component {
   }
 
   handleSubmit(event) {
-    const { claimUser } = this.props;
+    const { socket } = this.props;
     event.preventDefault();
 
     if(this.state.name === ""){
       alert("Item shouldn't be blank")
     }else{
-      claimUser(this.state.name);
+      // claimUser(this.state.name);
+      socket.emit("claimUser", { name: this.state.name });
+      console.log("Emito claimUser");
     }
   }
 
