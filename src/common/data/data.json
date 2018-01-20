@@ -1,0 +1,117 @@
+{
+    "techs":[
+        {
+            "id": 1,
+            "nombre": "techno1",
+            "childs": [
+                2, 4 
+            ],
+            "parents": [
+            ], 
+            "effects": [
+                {
+                    "who": "fighter",
+                    "what": "atk",
+                    "value": 2
+                },
+                {
+                    "who": "fighter",
+                    "what": "mov",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "nombre": "techno2",
+            "childs": [
+                3 
+            ],
+            "parents": [
+                1
+            ],
+            "effects": [
+                {
+                    "who": "carrier",
+                    "what": "atk",
+                    "value": 1
+                },
+                {
+                    "who": "carrier",
+                    "what": "mov",
+                    "value": 2
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "nombre": "techno3",
+            "childs": [
+                 
+            ],
+            "parents": [
+                2
+            ],
+            "effects": [
+                {
+                    "who": "destroyer",
+                    "what": "atk",
+                    "value": 1
+                },
+                {
+                    "who": "destroyer",
+                    "what": "mov",
+                    "value": 2
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "nombre": "techno4",
+            "childs": [
+                 
+            ],
+            "parents": [
+                1
+            ],
+            "effects": [
+                {
+                    "who": "dreadnought",
+                    "what": "atk",
+                    "value": 1
+                },
+                {
+                    "who": "dreadnought",
+                    "what": "mov",
+                    "value": 1
+                }
+            ]
+        }
+    ],
+    "ships": [
+        {
+            "nombre": "carrier",
+            "cost": 1,
+            "mov": 1,
+            "atk": 1
+        },
+        {
+            "nombre": "destroyer",
+            "cost": 1,
+            "mov": 1,
+            "atk": 1
+        },
+        {
+            "nombre": "dreadnought",
+            "cost": 1,
+            "mov": 1,
+            "atk": 1
+        },
+        {
+            "nombre": "fighter",
+            "cost": 1,
+            "mov": 1,
+            "atk": 1
+        }
+    ]
+}
