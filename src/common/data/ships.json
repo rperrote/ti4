@@ -1,0 +1,26 @@
+[
+    {
+        "nombre": "carrier",
+        "cost": 1,
+        "mov": 1,
+        "atk": 1
+    },
+    {
+        "nombre": "destroyer",
+        "cost": 1,
+        "mov": 1,
+        "atk": 1
+    },
+    {
+        "nombre": "dreadnought",
+        "cost": 1,
+        "mov": 1,
+        "atk": 1
+    },
+    {
+        "nombre": "fighter",
+        "cost": 1,
+        "mov": 1,
+        "atk": 1
+    }
+]

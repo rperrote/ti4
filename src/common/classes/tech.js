@@ -1,9 +1,11 @@
 import Effect from './effect';
 
 class Tech {
-    constructor (name, effects:Array<Effect>, childs) {
+    constructor (name, effects, childs) {
         this.name = name;
-        this.effects = effects;
+        this.effects = effects.map(effect => {
+          return new Effect(effect);
+        });
         this.childs = childs;
     }
 }

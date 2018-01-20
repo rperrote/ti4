@@ -1,10 +1,9 @@
 class Ship {
-    constructor (name, cost, battle, mvmt, especial) {
+    constructor (name, cost, battle, mvmt) {
         this.name = name;
         this.cost = cost;
         this.battle = battle;
         this.mvmt = mvmt;
-        this.especial = especial;
     }
 }
 

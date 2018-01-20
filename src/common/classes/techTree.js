@@ -2,28 +2,29 @@ import Effect from './effect';
 import Ship from './ship';
 import Tech from './tech';
 
+import techData from '../data/tech.json'
+import shipData from '../data/ship.json'
+
 class TechTree {
-    constructor (fileName) {
+    constructor () {
         this.techs = [];
         this.ships = [];
-        
-        var techTreeData = JSON.parse(fileName);
-        
-        techTreeData.techs.forEach( techData => {
+
+        techData.forEach( techData => {
             var effects = [];
             techData.effects.forEach( effectData => {
-                var effect = new Effect(effectData.who, effectData.what, effectData.value);
+                var effect = new Effect(effectData);
                 effects.push(effect);
             });
-            
-            var tech = new Tech(techData.nombre, effects, techData.childs);
+
+            var tech = new Tech(techData);
             this.techs.push(tech);
         });
-        
-        techTreeData.ships.forEach( shipData => {
+
+        shipData.forEach( shipData => {
             var ships = [];
-            
-            var tech = new Tech(shipData.nombre, shipData.cost, shipData.atk, shipData.mov, "");
+
+            var tech = new Tech(shipData);
             this.techs.push(tech);
         });
     }
