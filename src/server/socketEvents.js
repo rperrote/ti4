@@ -10,9 +10,6 @@ exports = module.exports = function(io) {
   const connections = [];
   const playerConnections = [];
   const connectionPlayers = [];
-  var gameId = 0;
-  var playerId = 0;
-  var battleId = 0;
   
   io.on("connection", function(socket) {
     console.log("Connected to Socket!!" + socket.id);
@@ -47,15 +44,11 @@ exports = module.exports = function(io) {
           console.log("---Gethy create game failed!! " + err);
           return;
         } else {
-          console.log({ message: "Created new game with id: " + result.id });
-          
-          var response = {};
-          response.gameId = gameModel.id;
-          
-          io.emit('gameCreated', response);
+          console.log({ message: "Created new game with id: " + gameModel.id });
           
           /******* join game ********/
-          joinUser(userId, result.id, playerConnections, io, true);
+          console.log("create game with userId" + userId);
+          joinUser(userId, gameModel.id, playerConnections, io, true);
           /******* join game finish ********/
         }
       });
@@ -81,22 +74,20 @@ exports = module.exports = function(io) {
       var userDb = null;
       
       /****** star user model get user ********/
-      UserModel.find(
+      UserModel.findOne(
         {name: user.name},
         // "-_id itemId item completed",
-        (err, result) => {
+        (err, userDb) => {
           if (err) {
             console.log("--claim user - GET USER failed!!");
             return;
           } else {
-            userDb = result[0];
-            
             var player = {};
             if( userDb != null ){
               player = userDb;
               
-              playerConnections[player.id] = socket.id;
-              connectionPlayers[socket.id] = player.id;
+              playerConnections[userDb.id] = socket.id;
+              connectionPlayers[socket.id] = userDb.id;
               
               io.to(socket.id).emit('claimUser', player);
               
@@ -116,15 +107,12 @@ exports = module.exports = function(io) {
               return;
             }else{
               player = {};
-              player.id = playerId;
-              playerId = playerId++;
               player.name = user.name;
               
-              var userModel = new UserModel({ id: player.id, name: user.name });
+              var userModel = new UserModel({ name: user.name });
               
               console.log("user claim " + user.name);
-              playerConnections[player.id] = socket.id;
-              connectionPlayers[socket.id] = player.id;
+
             
               /****** star user model save user********/
               userModel.save((err, result) => {
@@ -132,7 +120,11 @@ exports = module.exports = function(io) {
                   console.log("---claim user -  SAVE USER failed!! " + err);
                   return;
                 } else {
-                  io.to(socket.id).emit('claimUser', player);
+                  
+                  playerConnections[userModel.id] = socket.id;
+                  connectionPlayers[socket.id] = userModel.id;
+                  player.id + userModel.id;
+                  io.to(socket.id).emit('claimedUser', player);
                   
                   /****** star game model get games********/
                   GameModel.find({}, function(err, games) {
@@ -393,9 +385,17 @@ function broadcastToGame(game, myId,  event, body, playerConnections, io){
   })
 }
 
+function broadcastToAll(event, body, playerConnections, io){
+  playerConnections.forEach( userId => {
+     io.to(playerConnections[userId]).emit(event, body);
+  });
+}
+
 function joinUser(userId, gameId, playerConnections, io, skipSendList){
   var playerDb = null;
   var gameDb = null;
+  
+  console.log("finding game by id " + gameId);
   
   console.log("finding user by id " + userId);
   
@@ -429,15 +429,7 @@ function joinUser(userId, gameId, playerConnections, io, skipSendList){
                     console.log("---Gethyl GET GAMES failed!! " + err);
                     return;
                   }else{
-                    var gamePlayer = {};
-                    gamePlayer.name = userDb.name;
-                    gamePlayer.owner = userDb.id;
-                    var response = {};
-                    response.gameId = gameId;
-                    response.newPlayer = gamePlayer;
-                    console.log( "dens player ");
-                    console.log( game.players);
-                    broadcastToGame(game, userId, 'userJoined', response, playerConnections, io);
+                    broadcastToGame(game, userId, 'userJoined', game, playerConnections, io);
                   }
                 });
                 return;
@@ -474,10 +466,6 @@ function joinUser(userId, gameId, playerConnections, io, skipSendList){
                       return;
                     }else{
                       
-                      if( skipSendList ){
-                        return;
-                      }
-                      
                       GameModel.findOne({id: gameId}).
                       populate('players'). // only return the Persons name
                       exec(function(err, game) {
@@ -486,7 +474,18 @@ function joinUser(userId, gameId, playerConnections, io, skipSendList){
                           return;
                         }else{
                           console.log("send list games");
-                          broadcastToGame(game, userId, 'userJoined', response, playerConnections, io);
+                          
+                          if( skipSendList ){
+                            Object.keys(io.sockets.sockets).forEach(function(id) {
+                                console.log("ID:",id)  // socketId
+                            })
+                            console.log("skipListGame");
+                            io.emit('gameCreated', game);
+                            //broadcastToAll('gameCreated', game, playerConnections, io);
+                          }else{
+                            broadcastToGame(game, userId, 'userJoined', game, playerConnections, io);
+                            console.log("no skipListGame");
+                          }
                         }
                       });
                       
