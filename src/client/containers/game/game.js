@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import * as actions from '../../actions/actions';
-import User from '../../components/user/user';
+import Game from '../../components/game/game';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 let socket;
 
-class UserContainer extends Component {
+class GameContainer extends Component {
   constructor(props, context) {
     super(props, context);
     const { socket, dispatch, history } = this.props;
@@ -19,12 +19,12 @@ class UserContainer extends Component {
 
   render() {
     return (
-      <User {...this.props} />
+      <Game {...this.props} />
     );
   }
 }
 
-UserContainer.propTypes = {
+GameContainer.propTypes = {
   user: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   socket: PropTypes.object.isRequired
@@ -33,6 +33,7 @@ UserContainer.propTypes = {
 function mapStateToProps(state) {
   return {
       user: state.user,
+      game: state.game
   }
 }
-export default connect(mapStateToProps)(UserContainer)
+export default connect(mapStateToProps)(GameContainer)

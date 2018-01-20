@@ -2,10 +2,12 @@ import React from "react";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { browserHistory } from "react-router";
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import DevTools from "./components/devTools/devTools";
+
+import ada from '../common/classes/tech.js'
 
 import App from "./components/app/app";
 
@@ -17,7 +19,7 @@ const theme = createMuiTheme();
 
 const app = document.getElementById("app");
 
-const store = createStore(reducer, applyMiddleware(thunk), DevTools.instrument());
+const store = createStore(reducer, compose(applyMiddleware(thunk), DevTools.instrument()) );
 
 ReactDOM.render(
   <Provider store={store}>

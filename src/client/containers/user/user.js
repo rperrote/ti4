@@ -5,8 +5,6 @@ import User from '../../components/user/user';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-let socket;
-
 class UserContainer extends Component {
   constructor(props, context) {
     super(props, context);
@@ -17,7 +15,7 @@ class UserContainer extends Component {
       console.log("Responde pose");
       console.log(res);
 
-      this.claimUser = this.claimUser.bind(this);
+      // this.claimUser = this.claimUser.bind(this);
     });
 
     socket.on("listGames", res => {

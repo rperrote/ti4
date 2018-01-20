@@ -5,29 +5,44 @@ import Games from '../../components/games/games';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import Immutable from "immutable";
+class GamesContainers extends Component {
+  constructor(props, context) {
+    super(props, context);
+    const { socket, dispatch, history } = this.props;
 
-class GamesContainer extends Component {
+    socket.on("userJoined", res => {
+      let game = res;
+      game.currentPlayer = game.players.find(player => {
+        return user.id == player.owner;
+      });
+      dispatch(actions.setCurrentGame(game));
+      if (history.location.pathname.indexOf("game") == -1) {
+        history.push("/game");
+      }
+    });
+
+    socket.on('gameCreated',(res)=>{
+      console.log(`Juego creado ${res}`)
+      dispatch(actions.createGame(res));
+    });
+  }
+
   render() {
     return (
       <Games {...this.props} />
     );
   }
 }
-GamesContainer.propTypes = {
+
+GamesContainers.propTypes = {
   user: PropTypes.object.isRequired,
-  games: PropTypes.oneOfType([
-      PropTypes.instanceOf(Array),
-      PropTypes.instanceOf(Immutable.List)
-    ]).isRequired,
-  dispatch: PropTypes.func.isRequired,
-  socket: PropTypes.object.isRequired
+  dispatch: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {
   return {
       user: state.user,
-      games: state.games
+      games: state.games,
   }
 }
-export default connect(mapStateToProps)(GamesContainer)
+export default connect(mapStateToProps)(GamesContainers)

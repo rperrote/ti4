@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 
 import User from "../../containers/user/user";
 import Games from "../../containers/games/games";
+import Game from "../../containers/game/game";
 
 import io from 'socket.io-client';
 const socket = io.connect(`http://ti4-zionn.c9users.io:8082`)
@@ -21,6 +22,7 @@ class App extends React.Component {
                     <Switch>
                         <RouteWithProps exact path="/" component={User}/>
                         <RouteWithProps path="/games" component={Games}/>
+                        <RouteWithProps path="/game" component={Game}/>
                     </Switch>
                 </main>
             </div>
