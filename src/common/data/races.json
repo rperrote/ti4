@@ -1,0 +1,17 @@
+[
+  {
+    "id": 0,
+    "name": "The Federation of Sol",
+    "img": "Sol.png"
+  },
+  {
+    "id": 1,
+    "name": "The Barony of Letnev",
+    "img": "Letnev.png"
+  },
+  {
+    "id": 2,
+    "name": "The Emirates of Hacan",
+    "img": "Hacan.png"
+  }
+]

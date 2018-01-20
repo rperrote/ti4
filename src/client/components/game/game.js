@@ -3,16 +3,10 @@ import PropTypes from "prop-types";
 import * as actions from "../../actions/actions";
 import { connect } from "react-redux";
 
-import Paper from 'material-ui/Paper';
-import Tabs, { Tab } from 'material-ui/Tabs';
-import PhoneIcon from 'material-ui-icons/Phone';
+import BottomNavigation, { BottomNavigationAction } from 'material-ui/BottomNavigation';
+import RestoreIcon from 'material-ui-icons/Restore';
 import FavoriteIcon from 'material-ui-icons/Favorite';
-import PersonPinIcon from 'material-ui-icons/PersonPin';
-
-import Typography from 'material-ui/Typography';
-
-import ArrowRight from "material-ui-icons/KeyboardArrowRight";
-import AddIcon from "material-ui-icons/Add";
+import LocationOnIcon from 'material-ui-icons/LocationOn';
 
 let robotFontStyle = {
   fontFamily: "Roboto, sans-serif",
@@ -42,26 +36,20 @@ export default class Game extends Component {
       history.push("/");
     }
   }
-  componentDidUpdate() {}
+
   render() {
     const { socket, user, games, history, dispatch } = this.props;
     return (
-      <Paper style={{ width: '100%' }}>
-        {this.state.value === 0 && <TabContainer>Item One</TabContainer>}
-        {this.state.value === 1 && <TabContainer>Item Two</TabContainer>}
-        {this.state.value === 2 && <TabContainer>Item Three</TabContainer>}
-        <Tabs
-          value={this.state.value}
-          onChange={this.handleChange}
-          fullWidth
-          indicatorColor="accent"
-          textColor="accent"
-        >
-          <Tab label="ME" />
-          <Tab label="PLAYERS" />
-          <Tab label="TECHNOLOGIES" />
-        </Tabs>
-      </Paper>
+      <BottomNavigation
+        value={value}
+        onChange={this.handleChange}
+        showLabels
+        style={{width: '100%'}}
+      >
+        <BottomNavigationAction label="ME"/>
+        <BottomNavigationAction label="PLAYERS" icon={<FavoriteIcon />} />
+        <BottomNavigationAction label="TECHNOLOGIES" icon={<LocationOnIcon />} />
+      </BottomNavigation>
     );
   }
 }

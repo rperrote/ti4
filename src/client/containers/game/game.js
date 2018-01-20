@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types';
-import * as actions from '../../actions/actions';
-import Game from '../../components/game/game';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import PropTypes from "prop-types";
+import * as actions from "../../actions/actions";
+
+import Game from "../../components/game/game";
+import Races from "../../components/game/races";
+
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 
 let socket;
 
@@ -18,8 +21,12 @@ class GameContainer extends Component {
   }
 
   render() {
+    const { game } = this.props;
     return (
-      <Game {...this.props} />
+      <div>
+        {game.currentPlayer.race == null && <Races {...this.props} />}
+        {game.currentPlayer.race != null && <Game {...this.props} />}
+      </div>
     );
   }
 }
@@ -28,12 +35,12 @@ GameContainer.propTypes = {
   user: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   socket: PropTypes.object.isRequired
-}
+};
 
 function mapStateToProps(state) {
   return {
-      user: state.user,
-      game: state.game
-  }
+    user: state.user,
+    game: state.game
+  };
 }
-export default connect(mapStateToProps)(GameContainer)
+export default connect(mapStateToProps)(GameContainer);

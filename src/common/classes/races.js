@@ -1,10 +1,9 @@
-import Effect from './effect';
+import Race from 'race';
+import Data from '../data/races'
 
-class Races {
-    constructor (name, effects:Array<Effect>) {
-        this.name = name;
-        this.effects = effects;
-    }
-}
+let Races = Data.map(race=>{
+
+  return new Race(race);
+})
 
 export default Races;
