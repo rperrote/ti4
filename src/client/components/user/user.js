@@ -31,7 +31,7 @@ export default class User extends Component {
     event.preventDefault();
 
     if(this.state.name === ""){
-      alert("Item shouldn't be blank")
+      alert("Name shouldn't be blank")
     }else{
       // claimUser(this.state.name);
       socket.emit("claimUser", { name: this.state.name });
@@ -48,8 +48,8 @@ export default class User extends Component {
         <form onSubmit={this.handleSubmit}>
           <TextField
             id="name"
-            label="Nombre"
-            placeholder="Ingresa tu nombre"
+            label="Name"
+            placeholder="Insert name"
             value={this.state.name}
             onChange={this.handleChange}
             margin="normal"

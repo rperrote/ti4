@@ -12,9 +12,7 @@ class GamesContainers extends Component {
 
     socket.on("userJoined", res => {
       let game = res;
-      game.currentPlayer = game.players.find(player => {
-        return user.id == player.owner;
-      });
+      dispatch(actions.setGamePlayers(game));
       dispatch(actions.setCurrentGame(game));
       if (history.location.pathname.indexOf("game") == -1) {
         history.push("/game");

@@ -41,13 +41,16 @@
     "react-redux": "^5.0.1",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.9",
+    "react-swipeable-views": "^0.12.12",
     "react-tap-event-plugin": "^3.0.2",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
     "socket.io": "^1.7.2"
   },
   "devDependencies": {
+    "file-loader": "^1.1.6",
     "html-webpack-plugin": "^2.30.1",
+    "image-webpack-loader": "^3.4.2",
     "redux-devtools": "^3.4.1",
     "redux-devtools-dispatch": "^2.2.1",
     "redux-devtools-dock-monitor": "^1.1.3",

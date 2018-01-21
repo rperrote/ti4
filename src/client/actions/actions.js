@@ -39,6 +39,27 @@ export const setCurrentGame = (game) => {
 	}
 }
 
+export const setGamePlayers = (game) => {
+	return {
+		type: "SET_PLAYERS",
+		game
+	}
+}
+
+export const raceSelected = (data) => {
+	return {
+		type: "RACE_SELECTED",
+		data
+	}
+}
+
+export const mappingRace = (gameId) => {
+	return {
+		type: "MAPPING_RACE",
+		gameId
+	}
+}
+
 /***************************************************************************************** */
 /* Async Action items using - Sockets													   */
 /***************************************************************************************** */

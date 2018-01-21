@@ -1,14 +1,14 @@
 import Effect from './effect';
 
-class Races {
-    constructor (id, name, effects, img) {
-        this.id = id;
-        this.name = name;
-        this.effects = effects.map((effect) => {
-          return new Effect(effect);
-        }) || [];
-        this.img = require(`../../assets/img/${img}`)
+class Race {
+    constructor (race) {
+        this.id = race.id;
+        this.name = race.name;
+        this.effects = !race.effects || race.effects.map((effect) => {
+          return new Effect(race.effect);
+        });
+        this.img = require(`../../assets/img/${race.img}`)
     }
 }
 
-export default Races;
+export default Race;

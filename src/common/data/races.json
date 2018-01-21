@@ -2,16 +2,19 @@
   {
     "id": 0,
     "name": "The Federation of Sol",
+    "effects" : [],
     "img": "Sol.png"
   },
   {
     "id": 1,
     "name": "The Barony of Letnev",
+    "effects" : [],
     "img": "Letnev.png"
   },
   {
     "id": 2,
     "name": "The Emirates of Hacan",
+    "effects" : [],
     "img": "Hacan.png"
   }
 ]

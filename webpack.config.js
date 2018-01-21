@@ -16,13 +16,17 @@ module.exports = {
         query: {
           presets: ['react', 'es2015', 'stage-0']
         }
+      },
+      {
+        test: /\.(gif|png|jpe?g|svg)$/i,
+        loader: 'file-loader'
       }
-    ]
+    ],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
-    filename: "client.min.js"
+    filename: "client.min.[hash].js"
   },
   plugins: [
     new HtmlWebpackPlugin({

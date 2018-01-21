@@ -21,13 +21,6 @@ export default class Games extends Component {
     super(props, context);
   }
 
-  setLocalPlayerAndCurrentGame(player, game) {
-    const { dispatch, history } = this.props;
-    game.localPlayer = player;
-    dispatch(actions.setCurrentGame(game));
-    history.push("/game");
-  }
-
   componentWillMount() {
     const { socket, user, games, dispatch, history } = this.props;
     if (!user || !user.name || user.name == "") {
@@ -73,7 +66,8 @@ export default class Games extends Component {
                   if (!alreadyIn) {
                     socket.emit("joinGame", game.id);
                   } else {
-                    this.setLocalPlayerAndCurrentGame(alreadyIn, game);
+                    dispatch(actions.setCurrentGame(game));
+                    history.push("/game");
                   }
                 }}
                 button
