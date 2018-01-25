@@ -53,7 +53,7 @@ events outgoing:
  - Games:
     - listGames
     - gameCreated
-    - userJoined ( devuele id del user ) 
+    - userJoined ( devuele id del user )
  - Game:
     - userRace
     - chooseTecnology

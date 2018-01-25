@@ -1,15 +1,28 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import * as actions from "../../actions/actions";
+import { withStyles } from "material-ui/styles";
 import { connect } from "react-redux";
 
-import GridList, { GridListTile, GridListTileBar } from 'material-ui/GridList';
-import Subheader from 'material-ui/List/ListSubheader';
-import IconButton from 'material-ui/IconButton';
-import InfoIcon from 'material-ui-icons/Info';
-import RacesData from '../../../common/classes/races';
+import Table, {
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow
+} from "material-ui/Table";
+import Paper from "material-ui/Paper";
 
-export default class Races extends Component {
+const styles = theme => ({
+  root: {
+    width: "100%",
+    marginTop: theme.spacing.unit * 3,
+    overflowX: "auto",
+    height: "100vh",
+    padding: "10px"
+  }
+});
+
+class Player extends Component {
   state = {
     value: 0
   };
@@ -18,27 +31,33 @@ export default class Races extends Component {
     this.setState({ value });
   };
 
-  componentWillMount() {
-
-  }
+  componentWillMount() {}
 
   render() {
-    const { socket, game } = this.props;
+    const { socket, game, classes} = this.props;
     return (
-      <div >
-        <GridList cellHeight={200} >
-          {RacesData.map(race => (
-            <GridListTile key={race.id} onTouchTap={() => {
-                socket.emit("chooseRace", { gameId:game.id, raceId: race.id });
-              }}>
-              <img src={`${race.img}`} alt={race.name} />
-              <GridListTileBar
-                title={race.name}
-              />
-            </GridListTile>
-          ))}
-        </GridList>
+      <div>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell padding="none" >UNIT</TableCell>
+                <TableCell padding="none" >COST</TableCell>
+                <TableCell padding="none" >BATTLE</TableCell>
+                <TableCell padding="none" >MVMT</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell padding="none" >"PDS"</TableCell>
+                <TableCell padding="none" >1</TableCell>
+                <TableCell padding="none" >6</TableCell>
+                <TableCell padding="none" >-</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
       </div>
     );
   }
 }
+
+export default withStyles(styles)(Player);

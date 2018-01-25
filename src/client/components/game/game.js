@@ -11,6 +11,8 @@ import LocationOnIcon from "material-ui-icons/LocationOn";
 import Paper from "material-ui/Paper";
 import Typography from 'material-ui/Typography';
 
+import Player from './player';
+
 let robotFontStyle = {
   fontFamily: "Roboto, sans-serif",
   color: "rgba(0, 0, 0, 0.870588)"
@@ -48,24 +50,18 @@ export default class Game extends Component {
     const { socket, user, games, history, dispatch } = this.props;
     return (
       <div>
-        <SwipeableViews
-          axis="x-reverse"
-          index={this.state.value}
-          onChangeIndex={this.handleChangeIndex}
-        >
-          <TabContainer dir="rtl">Item One</TabContainer>
-          <TabContainer dir="rtl">Item Two</TabContainer>
-          <TabContainer dir="rtl">Item Three</TabContainer>
-        </SwipeableViews>
+        {this.state.value === 0 && <Player dir="rtl" {...this.props}></Player>}
+        {this.state.value === 1 && <TabContainer dir="ltr">Item Two</TabContainer>}
+        {this.state.value === 2 && <TabContainer dir="ltr">Item Three</TabContainer>}
         <BottomNavigation
           value={this.state.value}
           onChange={this.handleChange}
           showLabels
-          style={{ width: "99%", position: "absolute", bottom: 0 }}
+          style={{position: 'fixed', bottom: '0px', width: '95vw'}}
         >
           <BottomNavigationAction label="ME" />
-          <BottomNavigationAction label="PLAYERS"/>
-          <BottomNavigationAction label="TECHNOLOGIES"/>
+          <BottomNavigationAction label="OTHERS"/>
+          <BottomNavigationAction label="TECHS"/>
         </BottomNavigation>
       </div>
     );
